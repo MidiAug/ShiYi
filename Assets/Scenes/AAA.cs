@@ -15,8 +15,4 @@ public class AAA : MonoBehaviour
     {
         
     }
-    public void fun1()
-    {
-      Debug.Log("Hello World!");
-    }
 }
