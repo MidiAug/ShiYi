@@ -14,10 +14,8 @@ public class AAA : MonoBehaviour
     {
         
     }
-    public void fun1()
-    {
-
-    }
     int a;
     int b;
+    int c;
+    int d;
 }
