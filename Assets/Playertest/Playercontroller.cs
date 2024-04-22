@@ -7,6 +7,8 @@ public class Playercontroller : MonoBehaviour
     private Rigidbody2D rb;
     public float speed = 7f;
     int Jumpnum = 1;//Ã¯‘æ¥Œ ˝
+    bool isDash = false;
+    float dirX;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,7 +18,7 @@ public class Playercontroller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float dirX = Input.GetAxisRaw("Horizontal");
+        dirX = Input.GetAxisRaw("Horizontal");
         rb.velocity = new Vector2(dirX * speed, rb.velocity.y);
         if(Input.GetButtonDown("Jump")&&Jumpnum==1)
         {
@@ -27,5 +29,18 @@ public class Playercontroller : MonoBehaviour
         {
             Jumpnum = 1;
         }
+        if(Input.GetKeyDown(KeyCode.LeftShift))
+          isDash = true;
     }
+
+  private void FixedUpdate()
+  { // …¡œ÷æ‡¿Î
+    float dashDist = 5f;
+    Vector3 dashPosition = transform.position + new Vector3(dirX, 0, 0) * dashDist;
+    if (isDash)
+    {
+      rb.MovePosition(dashPosition);
+      isDash = false;
+    }
+  }
 }
