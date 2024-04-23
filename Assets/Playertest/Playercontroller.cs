@@ -31,6 +31,10 @@ public class Playercontroller : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.LeftShift))
           isDash = true;
+        if(Input.GetKeyDown(KeyCode.L))
+        {
+            Back();
+        }
     }
 
   private void FixedUpdate()
@@ -43,4 +47,19 @@ public class Playercontroller : MonoBehaviour
       isDash = false;
     }
   }
+    Vector2 position;
+    private bool IsBack = false;
+    private void Back()
+    {
+        if(IsBack==false)
+        {
+            position = gameObject.transform.position;
+            IsBack = true;
+        }
+        else
+        {
+            gameObject.transform.position = position;
+            IsBack = false;
+        }
+    }
 }
