@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class trapMove : MonoBehaviour
+public class StepMove : MonoBehaviour
 {
     public enum TrapMoveDir
     {
