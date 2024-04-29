@@ -12,7 +12,7 @@ public class StepMove : MonoBehaviour
     }
 
     public float moveSpeed; // 移动速度
-    public bool isMove = true; // 是否进行移动
+    private bool isMove = false; // 是否进行移动
     public Transform startTrans; // 开始的点
     public Transform endTrans; // 结束的点
     public GameObject trapObj; // 陷阱物体（注意修改为 GameObject 类型）
@@ -46,5 +46,10 @@ public class StepMove : MonoBehaviour
                 moveDir = TrapMoveDir.Down;
             }
         }
+    }
+    // 控制物体的运动状态
+    public void SetMovement(bool shouldMove)
+    {
+        isMove = shouldMove;
     }
 }
