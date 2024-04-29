@@ -7,21 +7,22 @@ public class Playercontroller : MonoBehaviour
 {
     private Rigidbody2D rb;
     //人物相关属性
-    private float moveSpeed = 5f;
     public float maxHp = 100;
-    public float curHp;
     public float speed = 7f;
+    private float dashDist = 5f;  // 闪现距离
+    private float invincibleTime = 1f;//无敌时间
+    private float jumpCons = 1.12f;  //跳跃系数，速度乘以此系数为跳跃时竖直方向的速度
+
+    private int Jumpnum = 1;//跳跃次数
     public bool die = false;
     public bool isInvincible;//判断是否无敌
-    private float invincibleTime = 1f;//无敌时间
     private float invincibleTimer;//计时器
-
+    public float curHp;
     private Animator animator;//人物动画
-
-    int Jumpnum = 1;//跳跃次数
+    private bool facingRight = false; // 默认角色朝向右边
     bool isDash = false;
     float dirX;
-    // Start is called before the first frame update
+
     void Start()
     {
         animator = gameObject.GetComponent<Animator>();
@@ -29,8 +30,6 @@ public class Playercontroller : MonoBehaviour
         invincibleTimer = 0;
         curHp = maxHp;
     }
-    // Update is called once per frame
-    private bool facingRight = false; // 默认角色朝向右边
 
     void Update()
     {
@@ -49,7 +48,7 @@ public class Playercontroller : MonoBehaviour
         rb.velocity = new Vector2(dirX * speed, rb.velocity.y);
         if (Input.GetButtonDown("Jump") && Jumpnum == 1)
         {
-            rb.velocity = new Vector2(rb.velocity.x, speed);
+            rb.velocity = new Vector2(rb.velocity.x, speed*jumpCons);
             Jumpnum = 0;
         }
         if (rb.velocity.y == 0)
@@ -101,7 +100,7 @@ public class Playercontroller : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        float dashDist = 5f;  // 闪现距离
+
         Vector2 dashDirection = new Vector2(dirX, 0).normalized;
         Vector2 offset = dashDirection * 0.1f;  // 在玩家前方稍作偏移
         Vector2 startPosition = new Vector2(transform.position.x, transform.position.y) + offset;  // 调整射线起始位置
