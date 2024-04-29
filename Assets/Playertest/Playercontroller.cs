@@ -16,7 +16,6 @@ public class Playercontroller : MonoBehaviour
     private float invincibleTime = 1f;//无敌时间
     private float invincibleTimer;//计时器
 
-    private Animator animator;//人物动画
 
     int Jumpnum = 1;//跳跃次数
     bool isDash = false;
@@ -24,14 +23,12 @@ public class Playercontroller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        animator = gameObject.GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         invincibleTimer = 0;
         curHp = maxHp;
     }
-    // Update is called once per frame
-    private bool facingRight = false; // 默认角色朝向右边
 
+    // Update is called once per frame
     void Update()
     {
         dirX = Input.GetAxisRaw("Horizontal");
@@ -58,47 +55,12 @@ public class Playercontroller : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.LeftShift))
             isDash = true;
-        if (Input.GetKeyUp(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.L))
         {
-            // 如果当前朝向为右边，则改变朝向为左边
-            if (facingRight)
-            {
-                FlipDirection();
-            }
-        }
-
-        // 检测D键松开
-        if (Input.GetKeyUp(KeyCode.D))
-        {
-            // 如果当前朝向为左边，则改变朝向为右边
-            if (!facingRight)
-            {
-                FlipDirection();
-            }
-        }
-
-        // 检测A键按下，且当前朝向不是向左
-        if (Input.GetKey(KeyCode.A) && facingRight)
-        {
-            FlipDirection();
-        }
-
-        // 检测D键按下，且当前朝向不是向右
-        if (Input.GetKey(KeyCode.D) && !facingRight)
-        {
-            FlipDirection();
+            Back();
         }
     }
-    void FlipDirection()
-    {
-        // 反转朝向
-        facingRight = !facingRight;
 
-        // 反转角色的水平缩放来改变朝向
-        Vector3 theScale = transform.localScale;
-        theScale.x *= -1;
-        transform.localScale = theScale;
-    }
     private void FixedUpdate()
     {
         float dashDist = 5f;  // 闪现距离
@@ -123,13 +85,6 @@ public class Playercontroller : MonoBehaviour
             rb.MovePosition(dashPosition);
             isDash = false;
         }
-        float moveY = Input.GetAxisRaw("Vertical");
-        Vector2 moveDirection=new Vector2(dirX,moveY).normalized;
-        Debug.Log("moveX:" + dirX + "moveY:" + moveY);
-        animator.SetFloat("Horizontal", dirX);
-        animator.SetFloat("Vertical", moveY);
-        animator.SetFloat("speed", moveDirection.sqrMagnitude);
-
     }
 
     Vector2 position;
