@@ -19,7 +19,7 @@ public class MovedTrap : MonoBehaviour
             Playercontroller pc = other.GetComponent<Playercontroller>();
             if (pc != null)
             {
-                pc.changeHealth(-5);
+                pc.Respawn();
             }
         }
     }
