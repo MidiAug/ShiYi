@@ -31,7 +31,7 @@ public class Playercontroller : MonoBehaviour
 	{
 			animator = gameObject.GetComponent<Animator>();
 			spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-            rb = GetComponent<Rigidbody2D>();
+      rb = GetComponent<Rigidbody2D>();
 			invincibleTimer = 0;
 			rb.sharedMaterial = Friction;
 	}
@@ -43,11 +43,11 @@ public class Playercontroller : MonoBehaviour
 		// 水平运动且更改方向
 		moveHorizontal();
 
-        // 竖直方向运动
-        moveVertical();
+    // 竖直方向运动
+    moveVertical();
 
-        //无敌计时
-        if (isInvincible)
+    //无敌计时
+    if (isInvincible)
 		{
 			invincibleTimer -= Time.deltaTime;
 			if (invincibleTimer < 0)
@@ -57,12 +57,18 @@ public class Playercontroller : MonoBehaviour
 		}
 
 
+
 	}
 	private void FixedUpdate()
 	{
 		// 冲刺方法
 		dashFun();
+    // 速度达到一定值说明会摔入虚空，复活
+    if (rb.velocity.y < -40f)
+    {
+      Respawn();
     }
+  }
 
 	private void Back()
 	{
@@ -78,7 +84,7 @@ public class Playercontroller : MonoBehaviour
 			}
 	}
 		
-	// 供存档点类调用，更新角色复活的位置
+	// 更新角色复活的位置
 	public void UpdateRespawnPos(Vector3 newRespawnPos)
 	{
 		respawnPos = newRespawnPos;
