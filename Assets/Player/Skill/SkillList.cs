@@ -14,6 +14,7 @@ public class SkillList : MonoBehaviour//获取玩家技能列表
     {
         Skilllist = new List<SKILL>();
         Skilllist[0] = new SKILL { UseTime = 9, Skilltype = SKILL.SkillTYPE.skill1, SkillName = "tea" };
+        Skilllist[1] = new SKILL { UseTime = 8, Skilltype = SKILL.SkillTYPE.skill2, SkillName = "dance" };
     }
     public void Additem(SKILL skill)
     {

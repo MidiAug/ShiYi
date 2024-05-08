@@ -27,6 +27,8 @@ public class Playercontroller : MonoBehaviour
 	public PhysicsMaterial2D noFriction;
 	public PhysicsMaterial2D Friction;
 
+	public int falshtimes = 8;
+	public int backtimes = 9;
 	void Start()
 	{
 			animator = gameObject.GetComponent<Animator>();
@@ -43,11 +45,11 @@ public class Playercontroller : MonoBehaviour
 		// 水平运动且更改方向
 		moveHorizontal();
 
-    // 竖直方向运动
-    moveVertical();
+		// 竖直方向运动
+		moveVertical();
 
-    //无敌计时
-    if (isInvincible)
+		//无敌计时
+		if (isInvincible)
 		{
 			invincibleTimer -= Time.deltaTime;
 			if (invincibleTimer < 0)
@@ -55,7 +57,7 @@ public class Playercontroller : MonoBehaviour
 				isInvincible = false;//倒计时结束
 			}
 		}
-	if(Input.GetKeyDown(KeyCode.L))
+		if(Input.GetKeyDown(KeyCode.L)&&backtimes>=0)
         {
 			Back();
         }
@@ -65,11 +67,11 @@ public class Playercontroller : MonoBehaviour
 		// 冲刺方法
 		dashFun();
     // 速度达到一定值说明会摔入虚空，复活
-    if (rb.velocity.y < -40f)
-    {
-      Respawn();
-    }
-  }
+		if (rb.velocity.y < -40f)
+		{
+		  Respawn();
+		}
+	}
 
 	private void Back()
 	{
@@ -82,6 +84,7 @@ public class Playercontroller : MonoBehaviour
 			{
 					gameObject.transform.position = position;
 					IsBack = false;
+					backtimes--;
 			}
 	}
 		
@@ -110,10 +113,10 @@ public class Playercontroller : MonoBehaviour
 
         rb.velocity = new Vector2(dirX * speed, rb.velocity.y);
 
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-            isDash = true;
-
-
+        if (Input.GetKeyDown(KeyCode.LeftShift)&&falshtimes>1)
+        {
+			isDash = true;
+        }
     }
     private void moveVertical()
     {
@@ -129,8 +132,6 @@ public class Playercontroller : MonoBehaviour
             Jumpnum = 1;
             rb.sharedMaterial = Friction;
         }
-
-
     }
 
 	private void dashFun()
@@ -155,6 +156,7 @@ public class Playercontroller : MonoBehaviour
 
             rb.MovePosition(dashPosition);
             isDash = false;
+			falshtimes--;//闪现次数
         }
         float moveY = Input.GetAxisRaw("Vertical");
         Vector2 moveDirection = new Vector2(dirX, moveY).normalized;
@@ -162,8 +164,6 @@ public class Playercontroller : MonoBehaviour
         animator.SetFloat("Horizontal", dirX);
         animator.SetFloat("Vertical", moveY);
         animator.SetFloat("speed", moveDirection.sqrMagnitude);
-
-
     }
     // 测试方法
     //void whatResPos()
