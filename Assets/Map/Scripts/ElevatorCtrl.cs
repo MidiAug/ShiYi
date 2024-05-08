@@ -38,7 +38,7 @@ public class ElevatorCtrl : MonoBehaviour
         if (isMove&&isBackAndForth)
         {
             deltaTime += Time.deltaTime;
-            float t = (Mathf.Sin((deltaTime) * speed - Mathf.PI / 2) + 1f) / 2f;
+            float t = (Mathf.Sin((deltaTime) * speed - Mathf.PI / 2) + 1f) / 2f * Mathf.Min(deltaTime / chargeTime, 1);
             board.transform.position = Vector3.Lerp(startPos, endPos, t);
         }
         else if (isMove&&!isBackAndForth) {

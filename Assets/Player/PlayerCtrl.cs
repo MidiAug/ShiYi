@@ -11,7 +11,7 @@ public class Playercontroller : MonoBehaviour
 	public float speed = 7f;
 	private float dashDist = 5f;  // 闪现距离
 	private float invincibleTime = 1f;//无敌时间
-	private float jumpCons = 1.12f;  //跳跃系数，速度乘以此系数为跳跃时竖直方向的速度
+	public float jumpCons = 1.8f;  //跳跃系数，速度乘以此系数为跳跃时竖直方向的速度
 	private Vector3 respawnPos= new Vector3( -63.13f , 41.83f ,0); // 重生的位置
 	Vector2 position;
 	private bool IsBack = false;
