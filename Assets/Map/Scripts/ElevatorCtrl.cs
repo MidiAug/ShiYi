@@ -13,6 +13,7 @@ public class ElevatorCtrl : MonoBehaviour
 
     public bool isMove = false; 
     public bool isBackAndForth=false;
+   
     public float chargeTime = 1f;    // 达到最大速度所需时间
     public float desireTime = 1.5f;  // 期望到达目标地点的时间
     public float speed;
