@@ -12,13 +12,13 @@ public class Playercontroller : MonoBehaviour
 	private float dashDist = 5f;  // 闪现距离
 	//private float invincibleTime = 1f;//无敌时间
 	public float jumpCons = 1.8f;  //跳跃系数，速度乘以此系数为跳跃时竖直方向的速度
-	private Vector3 respawnPos= new( -63.13f , 41.83f ,0); // 重生的位置
+	public Vector3 respawnPos= new( -63.13f , 41.83f ,0); // 重生的位置
 	Vector2 position;
 	private bool IsBack = false;
 
 	private int Jumpnum = 1;//跳跃次数
 	public bool die = false;
-	public bool isInvincible;//判断是否无敌
+	public bool isInvincible;//判断是否无敌(这个是不是没用，要不删了？)
 	private float invincibleTimer;//计时器
 	private Animator animator;//人物动画
 	//private bool facingRight = false; // 默认角色朝向右边

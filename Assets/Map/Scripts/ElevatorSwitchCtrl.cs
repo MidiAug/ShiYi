@@ -4,9 +4,9 @@ using UnityEngine;
 public class ElevatorSwitchCtrl : MonoBehaviour
 {
     public ElevatorCtrl elevatorCtrl;
+    public bool isFollowElevator=false;
     private Vector3 originalPosition; // 原始位置
     private Vector3 pressedPosition; // 按下后的位置
-    //public bool isFollowElevator = false;  // 是否开关跟随电梯一同移动
 
   void Start()
     {
@@ -24,22 +24,14 @@ public class ElevatorSwitchCtrl : MonoBehaviour
             {
                 elevatorCtrl.setIsMove(true); // 启动运动
             }
-            MoveButton(); // 移动按钮
+            if(!isFollowElevator)
+              MoveButton(); // 移动按钮
         }
         GetComponent<Collider2D>().enabled = false; // 禁用按钮的碰撞器
     }
-
+    
     private void MoveButton()
     {
         transform.position = pressedPosition; // 将按钮移动到按下后的位置
     }
-    
-    
-    //public void FollowElevator(Vector3 initialSwitchOffset,Vector3 ElevatorPosition)
-    //{
-    //  if (isFollowElevator){
-    //    // 使用localPosition保持相对位置
-    //    transform.localPosition = ElevatorPosition + initialSwitchOffset;
-    //  }
-    //}
 }

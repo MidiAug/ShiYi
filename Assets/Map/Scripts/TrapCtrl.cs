@@ -19,17 +19,18 @@ public class TrapCtrl : MonoBehaviour
     public GameObject dropTrigglePos;
     public float dropTriggleRadius = 1f;
     public float gravityScale = 1.0f;
+    public bool isRemain=true;
     private float timeToLive = 3f;
     private float curLiveTime = 0f;
     private GameObject player;
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
 
     // 弹出收回陷阱的弹出收回时间
     public float upTime;
     public float downTime;
     private bool isPop = true;
     private float deltaTime = 0;
-    // Start is called before the first frame update
+
     void Start()
     {
         if (trapMode == TrapMode.Fixed) fixedInit();
@@ -65,7 +66,6 @@ public class TrapCtrl : MonoBehaviour
         // 触发
         Vector3 trigglePos = dropTrigglePos.transform.position;
         float disBetweenTriggleAndPlayer = Vector2.Distance(trigglePos, player.transform.position);
-        //Debug.Log(trigglePos);
         if (disBetweenTriggleAndPlayer < dropTriggleRadius)
         {
             rb.simulated = true;
@@ -76,11 +76,10 @@ public class TrapCtrl : MonoBehaviour
             curLiveTime += Time.deltaTime;
             if(curLiveTime > timeToLive)
             {
+                isRemain = false;
                 Destroy(gameObject);
             }
         }
-
-        
     }
 
     void popUpInit()
