@@ -1,11 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TalkButton : MonoBehaviour
 {
     public GameObject talkUI;
     public Playercontroller playerController;
+    public DialogSystem dialogSystem;
 
     private bool playerInRange = false;
     private bool isTalking = false;
@@ -15,6 +14,10 @@ public class TalkButton : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerInRange = true;
+            if (!isTalking && Input.GetKeyDown(KeyCode.R)) // 只有当不在对话中时才能触发新的对话
+            {
+                StartTalking();
+            }
         }
     }
 
@@ -28,26 +31,38 @@ public class TalkButton : MonoBehaviour
 
     private void Update()
     {
-        if (playerInRange && Input.GetKeyDown(KeyCode.R))
+        // 当谈话UI处于活动状态时，按下Q键结束对话
+        if (isTalking && Input.GetKeyDown(KeyCode.Q))
         {
-            talkUI.SetActive(true);
-            isTalking = true;
-            // 禁用角色控制器
-            if (playerController != null)
-            {
-                playerController.enabled = false;
-            }
+            EndTalking();
         }
-        // 当谈话UI处于活动状态时，禁用角色控制器
-        if (isTalking && Input.GetKeyDown(KeyCode.Q)) // 如果你希望按下某个键来关闭对话框，这里我使用了 Escape 键
+    }
+
+    private void StartTalking()
+    {
+        talkUI.SetActive(true);
+        isTalking = true;
+        if (playerController != null)
         {
-            talkUI.SetActive(false);
-            isTalking = false;
-            // 启用角色控制器
-            if (playerController != null)
-            {
-                playerController.enabled = true;
-            }
+            playerController.enabled = false;
+        }
+        if (dialogSystem != null)
+        {
+            dialogSystem.gameObject.SetActive(true);
+        }
+    }
+
+    public void EndTalking()
+    {
+        talkUI.SetActive(false);
+        isTalking = false;
+        if (playerController != null)
+        {
+            playerController.enabled = true; // 在对话结束后重新启用角色控制器
+        }
+        if (dialogSystem != null)
+        {
+            dialogSystem.gameObject.SetActive(false);
         }
     }
 }
