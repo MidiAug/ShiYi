@@ -31,14 +31,17 @@ public class Playercontroller : MonoBehaviour
 
 	public int dashTimes = 8;
 	public int backtimes = 9;
-	void Start()
+    //音效
+    private PlayerAudio characterAudio;
+    void Start()
 	{
 		animator = gameObject.GetComponent<Animator>();
 		spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
 		rb = GetComponent<Rigidbody2D>();
 		invincibleTimer = 0;
 		rb.sharedMaterial = Friction;
-	}
+        characterAudio = GetComponent<PlayerAudio>();
+    }
 
 	void Update()
 	{
@@ -106,7 +109,7 @@ public class Playercontroller : MonoBehaviour
 	}
 	private void moveHorizontal()
 	{
-
+		
         if (dirX < 0)
         {
             spriteRenderer.flipX = false;  // 向左移动，翻转图片
@@ -127,6 +130,7 @@ public class Playercontroller : MonoBehaviour
     {
         if (Input.GetButtonDown("Jump") && Jumpnum == 1)
         {
+            characterAudio.PlayJumpSound();
             rb.velocity = new Vector2(rb.velocity.x, speed * jumpCons);
             Jumpnum = 0;
             rb.sharedMaterial = noFriction;
@@ -173,5 +177,6 @@ public class Playercontroller : MonoBehaviour
         animator.SetFloat("Horizontal", dirX);
         animator.SetFloat("Vertical", moveY);
         animator.SetFloat("speed", moveDirection.sqrMagnitude);
+        
     }
 }

@@ -37,35 +37,37 @@ public class DialogSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R)&&index==textList.Count)
+        if (Input.GetKeyDown(KeyCode.R) && index == textList.Count)
         {
             gameObject.SetActive(false);
             index = 0;
+            // 自动结束对话
+            if (FindObjectOfType<TalkButton>() != null)
+            {
+                FindObjectOfType<TalkButton>().EndTalking();
+            }
             return;
         }
-        //if (Input.GetKeyDown(KeyCode.R)&&textFinished)
-        //{
-        //    StartCoroutine(SetTextUI());
-        //}
-        if(Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R))
         {
-            if(textFinished&&!cancelTyping)
+            if (textFinished && !cancelTyping)
             {
                 StartCoroutine(SetTextUI());
             }
-            else if (!textFinished&&!cancelTyping)
+            else if (!textFinished && !cancelTyping)
             {
                 cancelTyping = true;
             }
         }
     }
 
+
     void GetTextFormFile(TextAsset file)
     {
         textList.Clear();
         index = 0;
 
-        var lineDate=file.text.Split('\n');
+        var lineDate = file.text.Split('\n');
 
         foreach (var line in lineDate)
         {
@@ -78,7 +80,7 @@ public class DialogSystem : MonoBehaviour
         textFinished = false;
         textLabel.text = "";
 
-        switch(textList[index].Trim().ToString())
+        switch (textList[index].Trim().ToString())
         {
             case "守护者":
                 faceImage.sprite = face01;
@@ -90,7 +92,7 @@ public class DialogSystem : MonoBehaviour
                 break;
         }
         int letter = 0;
-        while (!cancelTyping && letter<textList[index].Length-1 )
+        while (!cancelTyping && letter < textList[index].Length - 1)
         {
             textLabel.text += textList[index][letter];
             letter++;
