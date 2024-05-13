@@ -14,6 +14,7 @@ public class Playercontroller : MonoBehaviour
 	public float jumpCons = 1.8f;  //跳跃系数，速度乘以此系数为跳跃时竖直方向的速度
 	public Vector3 respawnPos= new( -63.13f , 41.83f ,0); // 重生的位置
 	Vector2 position;
+	public GameObject shadow;
 	private bool IsBack = false;
 
 	private bool isJump = false;
@@ -76,17 +77,20 @@ public class Playercontroller : MonoBehaviour
 
 	private void Back()
 	{
-			if (IsBack == false)
-			{
-					position = gameObject.transform.position;
-					IsBack = true;
-			}
-			else
-			{
-					gameObject.transform.position = position;
-					IsBack = false;
-					backtimes--;
-			}
+		if (IsBack == false)
+		{
+			position = gameObject.transform.position;
+			IsBack = true;
+			shadow.SetActive(true);
+			shadow.transform.position = new Vector2(position.x, position.y);
+		}
+		else
+		{
+			gameObject.transform.position = position;
+			IsBack = false;
+			backtimes--;
+			shadow.SetActive(false);
+		}
 	}
 		
 	// 更新角色复活的位置
