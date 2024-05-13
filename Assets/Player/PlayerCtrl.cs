@@ -16,12 +16,13 @@ public class Playercontroller : MonoBehaviour
 	Vector2 position;
 	private bool IsBack = false;
 
+	private bool isJump = false;
 	private int Jumpnum = 1;//跳跃次数
 	public bool die = false;
-	public bool isInvincible;//判断是否无敌(这个是不是没用，要不删了？)
+	public bool isInvincible;//判断是否无敌(这个是不是没用，要不删了？) 有用的，可以点击查看引用去找
 	private float invincibleTimer;//计时器
 	private Animator animator;//人物动画
-	//private bool facingRight = false; // 默认角色朝向右边
+
 	bool isDash = false;
 	float dirX;
 	public PhysicsMaterial2D noFriction;
@@ -31,11 +32,11 @@ public class Playercontroller : MonoBehaviour
 	public int backtimes = 9;
 	void Start()
 	{
-			animator = gameObject.GetComponent<Animator>();
-			spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-      rb = GetComponent<Rigidbody2D>();
-			invincibleTimer = 0;
-			rb.sharedMaterial = Friction;
+		animator = gameObject.GetComponent<Animator>();
+		spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+		rb = GetComponent<Rigidbody2D>();
+		invincibleTimer = 0;
+		rb.sharedMaterial = Friction;
 	}
 
 	void Update()
@@ -67,7 +68,7 @@ public class Playercontroller : MonoBehaviour
 		// 冲刺方法
 		dashFun();
     // 速度达到一定值说明会摔入虚空，复活
-		if (rb.velocity.y < -30f)
+		if (rb.velocity.y < -40f)
 		{
 		  Respawn();
 		}
@@ -120,14 +121,18 @@ public class Playercontroller : MonoBehaviour
     }
     private void moveVertical()
     {
-
         if (Input.GetButtonDown("Jump") && Jumpnum == 1)
         {
             rb.velocity = new Vector2(rb.velocity.x, speed * jumpCons);
             Jumpnum = 0;
             rb.sharedMaterial = noFriction;
         }
-        if (rb.velocity.y == 0)
+        //if (rb.velocity.y == 0)
+        if (Mathf.Abs(rb.velocity.y) > 0.0001)
+        {
+            rb.sharedMaterial = noFriction;
+        }
+        if (Mathf.Abs(rb.velocity.y  )<0.0001)
         {
             Jumpnum = 1;
             rb.sharedMaterial = Friction;
