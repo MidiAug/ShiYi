@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Tile
   - Button
+  - Elevator
   layers:
   - Default
   - TransparentFX
@@ -13,7 +14,7 @@ TagManager:
   - player
   - Water
   - UI
-  - 
+  - UImap
   - 
   - 
   - 

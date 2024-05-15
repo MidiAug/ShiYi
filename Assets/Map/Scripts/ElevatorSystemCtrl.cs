@@ -4,40 +4,40 @@ using UnityEngine;
 
 public class ElevatorSystemCtrl : MonoBehaviour
 {
-  public ElevatorSwitchCtrl elevatorSwitch; // 设置为公有，方便在Inspector中赋值
-  public ElevatorCtrl elevator; // 设置为公有，方便在Inspector中赋值
-  private Vector3 initialSwitchOffset; // 开关相对于电梯的初始偏移
+    public ElevatorSwitchCtrl elevatorSwitch; // 设置为公有，方便在Inspector中赋值
+    public ElevatorCtrl elevator; // 设置为公有，方便在Inspector中赋值
+    private Vector3 initialSwitchOffset; // 开关相对于电梯的初始偏移
 
-  private void Start()
-  {
-    Debug.Log(initialSwitchOffset);
+    private void Start()
+    {
+    //Debug.Log(initialSwitchOffset);
     // 确保从子对象中获取组件
-    if (elevator == null)
-    {
-      elevator = GetComponentInChildren<ElevatorCtrl>();
-    }
+        if (elevator == null)
+        {
+            elevator = GetComponentInChildren<ElevatorCtrl>();
+        }
 
-    if (elevatorSwitch == null)
-    {
-      elevatorSwitch = GetComponentInChildren<ElevatorSwitchCtrl>();
-    }
+        if (elevatorSwitch == null)
+        {
+            elevatorSwitch = GetComponentInChildren<ElevatorSwitchCtrl>();
+        }
 
-    // 检查组件是否成功获取
-    if (elevator != null && elevatorSwitch != null)
-    {
-      initialSwitchOffset = elevatorSwitch.transform.localPosition - elevator.board.transform.localPosition;
-    }
-    else
-    {
-      Debug.LogError("Elevator or ElevatorSwitch is not assigned or found.");
-    }
-  }
+        // 检查组件是否成功获取
+        if (elevator != null && elevatorSwitch != null)
+        {
+            initialSwitchOffset = elevatorSwitch.transform.localPosition - elevator.board.transform.localPosition;
+        }
+        else
+        {
+            Debug.LogError("Elevator or ElevatorSwitch is not assigned or found.");
+        }
+        }
 
-  private void Update()
-  {
+    private void Update()
+    {
     if (elevator != null && elevatorSwitch != null && elevator.isMove&&elevatorSwitch.isFollowElevator)
     {
-      elevatorSwitch.transform.localPosition = elevator.board.transform.localPosition + initialSwitchOffset;
+        elevatorSwitch.transform.localPosition = elevator.board.transform.localPosition + initialSwitchOffset;
     }
-  }
+    }
 }

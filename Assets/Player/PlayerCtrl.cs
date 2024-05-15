@@ -179,4 +179,21 @@ public class Playercontroller : MonoBehaviour
         animator.SetFloat("speed", moveDirection.sqrMagnitude);
         
     }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+		// 碰到电梯成为子物体
+		if (collision.gameObject.tag == "Elevator")
+		{
+			transform.SetParent(collision.transform);
+		}
+    }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        // 碰到电梯成为子物体
+        if (collision.gameObject.tag == "Elevator")
+        {
+			transform.SetParent(null);
+        }
+    }
+
 }
