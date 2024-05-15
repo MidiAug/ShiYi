@@ -6,6 +6,8 @@ public class ChestCrush : MonoBehaviour
 {
     public GameObject[] itemsToDrop; // 存放要掉落的道具
     public float moveSpeed = 20f; // 宝箱追踪角色的速度
+    public bool isTrace = false;  
+
 
     private Vector2 initialPosition; // 初始位置
     private bool isOpened = false; //是否已经打开过
@@ -19,7 +21,7 @@ public class ChestCrush : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         Playercontroller pc = other.GetComponent<Playercontroller>();
-        if (pc != null && !isOpened)
+        if (pc != null && !isOpened&&isTrace)
         {
             StartCoroutine(OpenChestAndTrackPlayer());
         }
