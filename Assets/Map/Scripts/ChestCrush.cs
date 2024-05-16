@@ -6,7 +6,7 @@ public class ChestCrush : MonoBehaviour
 {
     public GameObject[] itemsToDrop; // 存放要掉落的道具
     public float moveSpeed = 20f; // 宝箱追踪角色的速度
-    public bool isTrace = false;  
+    public bool isTrace = false;  // 是否是一个追踪玩家的宝箱
 
 
     private Vector2 initialPosition; // 初始位置

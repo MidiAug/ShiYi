@@ -72,8 +72,9 @@ public class Playercontroller : MonoBehaviour
 		// 冲刺方法
 		dashFun();
     // 速度达到一定值说明会摔入虚空，复活
-		if (rb.velocity.y < -40f)
+		if (rb.velocity.y < -60f)
 		{
+			Debug.Log("fuck");
 		  Respawn();
 		}
 	}
