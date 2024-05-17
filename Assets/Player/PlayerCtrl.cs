@@ -31,6 +31,7 @@ public class Playercontroller : MonoBehaviour
 
 	public int dashTimes = 8;
 	public int backtimes = 9;
+	public int Score = 0;
     //“Ù–ß
     private PlayerAudio characterAudio;
     void Start()
