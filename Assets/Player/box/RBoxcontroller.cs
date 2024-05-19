@@ -16,6 +16,7 @@ public class RBoxcontroller : MonoBehaviour
             if(rand==1)
             {
                 player.gameObject.GetComponent<Playercontroller>().backtimes = 9;
+                player.gameObject.GetComponent<Playercontroller>().Notice = 'b';
                 Skill.gameObject.GetComponent<SkillController>().SkillOneTimes = 9;
                 Skill.gameObject.GetComponent<SkillController>().RefreshUI();
                 Destroy(gameObject);
@@ -23,6 +24,7 @@ public class RBoxcontroller : MonoBehaviour
             else if(rand==2)
             {
                 player.gameObject.GetComponent<Playercontroller>().dashTimes = 8;
+                player.gameObject.GetComponent<Playercontroller>().Notice = 'f';
                 Skill.gameObject.GetComponent<SkillController>().SkillTwoTimes = 8;
                 Skill.gameObject.GetComponent<SkillController>().RefreshUI();
                 Destroy(gameObject);
@@ -30,16 +32,19 @@ public class RBoxcontroller : MonoBehaviour
             else if(rand==3|| rand == 4|| rand == 5|| rand == 6)//积分加1
             {
                 player.gameObject.GetComponent<Playercontroller>().Score += 1;
+                player.gameObject.GetComponent<Playercontroller>().Notice = 'o';
                 Destroy(gameObject);
             }
             else if(rand==7|| rand == 8)//积分加2
             {
                 player.gameObject.GetComponent<Playercontroller>().Score += 2;
+                player.gameObject.GetComponent<Playercontroller>().Notice = 't';
                 Destroy(gameObject);
             }
             else if(rand==9)//积分加5
             {
                 player.gameObject.GetComponent<Playercontroller>().Score += 5;
+                player.gameObject.GetComponent<Playercontroller>().Notice = 'F';
                 Destroy(gameObject);
             }
         }
