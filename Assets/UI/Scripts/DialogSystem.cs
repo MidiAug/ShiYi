@@ -22,26 +22,37 @@ public class DialogSystem : MonoBehaviour
     bool cancelTyping;
 
     List<string> textList = new List<string>();
-    // Start is called before the first frame update
+
+    [Header("选择按钮")]
+    public GameObject choicePanel;
+    public Button choice1;
+    public Button choice2;
+    public Button choice3;
+    public Button choice4;
+
     void Awake()
     {
         GetTextFormFile(textFile);
     }
+
     private void OnEnable()
     {
-        //textLabel.text = textList[index];
-        //index++;
-        StartCoroutine(SetTextUI());
+        if (textList.Count > 0)
+        {
+            StartCoroutine(SetTextUI());
+        }
+        else
+        {
+            Debug.LogError("Text list is empty!");
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.R) && index == textList.Count)
         {
             gameObject.SetActive(false);
             index = 0;
-            // 自动结束对话
             if (FindObjectOfType<TalkButton>() != null)
             {
                 FindObjectOfType<TalkButton>().EndTalking();
@@ -61,17 +72,27 @@ public class DialogSystem : MonoBehaviour
         }
     }
 
-
     void GetTextFormFile(TextAsset file)
     {
         textList.Clear();
         index = 0;
 
-        var lineDate = file.text.Split('\n');
-
-        foreach (var line in lineDate)
+        if (file == null)
         {
-            textList.Add(line);
+            Debug.LogError("Text file is null!");
+            return;
+        }
+
+        var lineData = file.text.Split('\n');
+
+        foreach (var line in lineData)
+        {
+            textList.Add(line.Trim());
+        }
+
+        if (textList.Count == 0)
+        {
+            Debug.LogError("No lines found in the text file!");
         }
     }
 
@@ -80,7 +101,23 @@ public class DialogSystem : MonoBehaviour
         textFinished = false;
         textLabel.text = "";
 
-        switch (textList[index].Trim().ToString())
+        while (index < textList.Count && textList[index].StartsWith("#"))
+        {
+            index++;
+        }
+
+        if (index >= textList.Count)
+        {
+            yield break;
+        }
+
+        if (textList[index].StartsWith("&"))
+        {
+            choicePanel.SetActive(true);
+            yield break;  // Wait for user to make a choice
+        }
+
+        switch (textList[index])
         {
             case "守护者":
                 faceImage.sprite = face01;
@@ -91,8 +128,9 @@ public class DialogSystem : MonoBehaviour
                 index++;
                 break;
         }
+
         int letter = 0;
-        while (!cancelTyping && letter < textList[index].Length - 1)
+        while (!cancelTyping && letter < textList[index].Length)
         {
             textLabel.text += textList[index][letter];
             letter++;
@@ -102,5 +140,37 @@ public class DialogSystem : MonoBehaviour
         cancelTyping = false;
         textFinished = true;
         index++;
+    }
+
+    void Start()
+    {
+        choice1.onClick.AddListener(() => OnChoiceClick(1));
+        choice2.onClick.AddListener(() => OnChoiceClick(2));
+        choice3.onClick.AddListener(() => OnChoiceClick(3));
+        choice4.onClick.AddListener(() => OnChoiceClick(4));
+    }
+
+    void OnChoiceClick(int choice)
+    {
+        if (!choicePanel.activeSelf)
+        {
+            choicePanel.SetActive(true);
+        }
+
+        switch (choice)
+        {
+            case 1:
+            case 3:
+            case 4:
+                index = 7;  // Example index for these choices
+                break;
+            case 2:
+                index = 10; // Example index for the second choice
+                break;
+        }
+
+        choicePanel.SetActive(false); // Hide the choice panel after making a choice
+        textFinished = true;
+        StartCoroutine(SetTextUI());
     }
 }
