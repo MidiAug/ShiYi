@@ -10,11 +10,14 @@ public class SkillController : MonoBehaviour
     public TextMeshProUGUI skill2times;
     public int SkillOneTimes;
     public int SkillTwoTimes;
+    public Transform player;
+    private Playercontroller playerController;
     private bool Skill1 = false;
     private void Start()
     {
-        SkillOneTimes = 9;
-        SkillTwoTimes = 8;
+        playerController = player.GetComponent<Playercontroller>();
+        SkillOneTimes = playerController.backtimes;
+        SkillTwoTimes = playerController.dashTimes;
         RefreshUI();
     }
     public void RefreshUI()
@@ -22,29 +25,29 @@ public class SkillController : MonoBehaviour
         skill1times.SetText(SkillOneTimes.ToString());
         skill2times.SetText(SkillTwoTimes.ToString());
     }
-    private void Update()
+    public void useSkill(int whichOne)
     {
-        if(Skill1==false&&Input.GetKeyDown(KeyCode.L))
+        if(whichOne == 1)
         {
-            Skill1 = true;
+            SkillOneTimes--;
         }
-        else if(Skill1==true && Input.GetKeyDown(KeyCode.L))
+        else if(whichOne == 2)
         {
-            Skill1 = false;
-            if (SkillOneTimes>=1)
-            {
-                SkillOneTimes--;
-            }
-            //skillList.GetSkilllist()[0].UseTime--;
-            RefreshUI();
+            SkillTwoTimes--;
         }
-        if(Input.GetKeyDown(KeyCode.LeftShift)|| Input.GetKeyDown(KeyCode.RightShift))
-        {
-            if (SkillTwoTimes >= 1)
-            {
-                SkillTwoTimes--;
-            }
-            RefreshUI();
-        }
+        RefreshUI();
     }
+    public bool couldUse(int whichOne)
+    {
+        if(whichOne == 1)
+        {
+            return SkillOneTimes > 0;
+        }
+        else if( whichOne == 2)
+        {
+            return SkillTwoTimes > 0;
+        }
+        return false;
+    }
+   
 }

@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class Playercontroller : MonoBehaviour
 {
-	private Rigidbody2D rb;
+	private SkillController skillController;
+    private Rigidbody2D rb;
 	private SpriteRenderer spriteRenderer;
 	//人物相关属性
 	public float speed = 7f;
@@ -16,8 +17,10 @@ public class Playercontroller : MonoBehaviour
 	Vector2 position;
 	public GameObject shadow;
 	private bool IsBack = false;
-
 	private bool isJump = false;
+
+	public int dashTimes = 9;
+	public int backtimes = 9;
 	private int Jumpnum = 1;//跳跃次数
 	public bool die = false;
 	public bool isInvincible;//判断是否无敌(这个是不是没用，要不删了？) 有用的，可以点击查看引用去找
@@ -29,8 +32,6 @@ public class Playercontroller : MonoBehaviour
 	public PhysicsMaterial2D noFriction;
 	public PhysicsMaterial2D Friction;
 
-	public int dashTimes = 8;
-	public int backtimes = 9;
 	public int Score = 0;
 	public char Notice='0';
     //音效
@@ -43,6 +44,7 @@ public class Playercontroller : MonoBehaviour
 		invincibleTimer = 0;
 		rb.sharedMaterial = Friction;
         characterAudio = GetComponent<PlayerAudio>();
+		skillController = GameObject.Find("SkillController").GetComponent<SkillController>();
     }
 
 	void Update()
@@ -64,7 +66,7 @@ public class Playercontroller : MonoBehaviour
 				isInvincible = false;//倒计时结束
 			}
 		}
-		if(Input.GetKeyDown(KeyCode.L)&&backtimes>=0)
+		if(Input.GetKeyDown(KeyCode.L)&&skillController.couldUse(1))
         {
 			Back();
         }
@@ -94,7 +96,7 @@ public class Playercontroller : MonoBehaviour
 		{
 			gameObject.transform.position = position;
 			IsBack = false;
-			backtimes--;
+			skillController.useSkill(1);
 			shadow.SetActive(false);
 		}
 	}
@@ -124,7 +126,8 @@ public class Playercontroller : MonoBehaviour
 
         rb.velocity = new Vector2(dirX * speed, rb.velocity.y);
 
-        if (Input.GetKeyDown(KeyCode.LeftShift)&&dashTimes>1)
+
+        if (Input.GetKeyDown(KeyCode.LeftShift) && skillController.couldUse(2) && rb.velocity !=Vector2.zero)
         {
 			isDash = true;
         }
@@ -149,7 +152,6 @@ public class Playercontroller : MonoBehaviour
             rb.sharedMaterial = Friction;
         }
     }
-
 	private void dashFun()
 	{
         Vector2 dashDirection = new Vector2(dirX, 0).normalized;
@@ -172,7 +174,7 @@ public class Playercontroller : MonoBehaviour
 
             rb.MovePosition(dashPosition);
             isDash = false;
-						dashTimes--;//闪现次数
+			skillController.useSkill(2);
         }
         float moveY = Input.GetAxisRaw("Vertical");
         Vector2 moveDirection = new Vector2(dirX, moveY).normalized;
@@ -187,12 +189,13 @@ public class Playercontroller : MonoBehaviour
 		// 碰到电梯成为子物体
 		if (collision.gameObject.tag == "Elevator")
 		{
+
 			transform.SetParent(collision.transform);
 		}
     }
     private void OnCollisionExit2D(Collision2D collision)
     {
-        // 碰到电梯成为子物体
+        // 退出电梯恢复
         if (collision.gameObject.tag == "Elevator")
         {
 			transform.SetParent(null);
