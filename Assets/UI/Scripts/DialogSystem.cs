@@ -6,171 +6,130 @@ using UnityEngine.UI;
 
 public class DialogSystem : MonoBehaviour
 {
-    [Header("UI组件")]
-    public TMP_Text textLabel;
-    public Image faceImage;
+    public TextAsset dialogDataFile;
 
-    [Header("文本文件")]
-    public TextAsset textFile;
-    public int index;
-    public float textSpeed;
+    public SpriteRenderer spriteLeft;
+    public SpriteRenderer spriteRight;
 
-    [Header("头像")]
-    public Sprite face01, face02;
+    public TMP_Text nameText;
+    public TMP_Text dialogText;
 
-    bool textFinished;
-    bool cancelTyping;
+    public List<Sprite> sprites = new List<Sprite>();
 
-    List<string> textList = new List<string>();
+    Dictionary<string, Sprite> imageDic = new Dictionary<string, Sprite>();
 
-    [Header("选择按钮")]
-    public GameObject choicePanel;
-    public Button choice1;
-    public Button choice2;
-    public Button choice3;
-    public Button choice4;
+    public int dialogIndex = 0;
+    public string[] dialogRows;
 
-    void Awake()
+    public Button next;
+    public GameObject optionButton;
+    public Transform buttonGroup;
+
+    public GameObject dialogCanvas;
+
+    private System.Action onDialogComplete; // 回调函数
+
+    private void Awake()
     {
-        GetTextFormFile(textFile);
-    }
-
-    private void OnEnable()
-    {
-        if (textList.Count > 0)
-        {
-            StartCoroutine(SetTextUI());
-        }
-        else
-        {
-            Debug.LogError("Text list is empty!");
-        }
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.R) && index == textList.Count)
-        {
-            gameObject.SetActive(false);
-            index = 0;
-            if (FindObjectOfType<TalkButton>() != null)
-            {
-                FindObjectOfType<TalkButton>().EndTalking();
-            }
-            return;
-        }
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            if (textFinished && !cancelTyping)
-            {
-                StartCoroutine(SetTextUI());
-            }
-            else if (!textFinished && !cancelTyping)
-            {
-                cancelTyping = true;
-            }
-        }
-    }
-
-    void GetTextFormFile(TextAsset file)
-    {
-        textList.Clear();
-        index = 0;
-
-        if (file == null)
-        {
-            Debug.LogError("Text file is null!");
-            return;
-        }
-
-        var lineData = file.text.Split('\n');
-
-        foreach (var line in lineData)
-        {
-            textList.Add(line.Trim());
-        }
-
-        if (textList.Count == 0)
-        {
-            Debug.LogError("No lines found in the text file!");
-        }
-    }
-
-    IEnumerator SetTextUI()
-    {
-        textFinished = false;
-        textLabel.text = "";
-
-        while (index < textList.Count && textList[index].StartsWith("#"))
-        {
-            index++;
-        }
-
-        if (index >= textList.Count)
-        {
-            yield break;
-        }
-
-        if (textList[index].StartsWith("&"))
-        {
-            choicePanel.SetActive(true);
-            yield break;  // Wait for user to make a choice
-        }
-
-        switch (textList[index])
-        {
-            case "守护者":
-                faceImage.sprite = face01;
-                index++;
-                break;
-            case "闽闽":
-                faceImage.sprite = face02;
-                index++;
-                break;
-        }
-
-        int letter = 0;
-        while (!cancelTyping && letter < textList[index].Length)
-        {
-            textLabel.text += textList[index][letter];
-            letter++;
-            yield return new WaitForSeconds(textSpeed);
-        }
-        textLabel.text = textList[index];
-        cancelTyping = false;
-        textFinished = true;
-        index++;
+        dialogCanvas.SetActive(false);
+        imageDic["闽闽"] = sprites[0];
+        imageDic["守护者"] = sprites[1];
     }
 
     void Start()
     {
-        choice1.onClick.AddListener(() => OnChoiceClick(1));
-        choice2.onClick.AddListener(() => OnChoiceClick(2));
-        choice3.onClick.AddListener(() => OnChoiceClick(3));
-        choice4.onClick.AddListener(() => OnChoiceClick(4));
+        ReadText(dialogDataFile);
     }
 
-    void OnChoiceClick(int choice)
+    public void StartDialog(System.Action onComplete)
     {
-        if (!choicePanel.activeSelf)
-        {
-            choicePanel.SetActive(true);
-        }
+        dialogIndex = 0;
+        onDialogComplete = onComplete;
+        dialogCanvas.SetActive(true);
+        ShowDialogRow();
+    }
 
-        switch (choice)
-        {
-            case 1:
-            case 3:
-            case 4:
-                index = 7;  // Example index for these choices
-                break;
-            case 2:
-                index = 10; // Example index for the second choice
-                break;
-        }
+    public void UpdateText(string _name, string _text)
+    {
+        nameText.text = _name;
+        dialogText.text = _text;
+    }
 
-        choicePanel.SetActive(false); // Hide the choice panel after making a choice
-        textFinished = true;
-        StartCoroutine(SetTextUI());
+    public void UpdateImage(string _name, string _position)
+    {
+        if (_position == "左")
+        {
+            spriteLeft.sprite = imageDic[_name];
+        }
+        else if (_position == "右")
+        {
+            spriteRight.sprite = imageDic[_name];
+        }
+    }
+
+    public void ReadText(TextAsset _textAsset)
+    {
+        dialogRows = _textAsset.text.Split('\n');
+        Debug.Log("读取成功");
+    }
+
+    public void ShowDialogRow()
+    {
+        for (int i = 0; i < dialogRows.Length; i++)
+        {
+            string[] cells = dialogRows[i].Split(',');
+            if (cells[0] == "#" && int.Parse(cells[1]) == dialogIndex)
+            {
+                UpdateText(cells[2], cells[4]);
+                UpdateImage(cells[2], cells[3]);
+
+                dialogIndex = int.Parse(cells[5]);
+                next.gameObject.SetActive(true);
+                break;
+            }
+            else if (cells[0] == "&" && int.Parse(cells[1]) == dialogIndex)
+            {
+                next.gameObject.SetActive(false);
+                GenerateOption(i);
+                break;
+            }
+            else if (cells[0] == "END" && int.Parse(cells[1]) == dialogIndex)
+            {
+                dialogCanvas.SetActive(false);
+                onDialogComplete?.Invoke(); // 调用回调函数
+            }
+        }
+    }
+
+    public void OnClickNext()
+    {
+        ShowDialogRow();
+    }
+
+    public void GenerateOption(int _index)
+    {
+        string[] cells = dialogRows[_index].Split(',');
+        if (cells[0] == "&")
+        {
+            GameObject button = Instantiate(optionButton, buttonGroup);
+            //绑定按钮
+            button.GetComponentInChildren<TMP_Text>().text = cells[4];
+            button.GetComponent<Button>().onClick.AddListener(
+            delegate
+            {
+                OnOptionClick(int.Parse(cells[5]));
+            });
+            GenerateOption(_index + 1);
+        }
+    }
+
+    public void OnOptionClick(int _id)
+    {
+        dialogIndex = _id;
+        ShowDialogRow();
+        for (int i = 0; i < buttonGroup.childCount; i++)
+        {
+            Destroy(buttonGroup.GetChild(i).gameObject);
+        }
     }
 }
