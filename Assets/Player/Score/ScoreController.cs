@@ -14,31 +14,31 @@ public class ScoreController : MonoBehaviour
         Score.SetText(player.gameObject.GetComponent<Playercontroller>().Score.ToString());
         if (player.gameObject.GetComponent<Playercontroller>().Notice =='b')
         {
-            What.SetText("You get the " + "BackRefresh ×1"+ " from the box");
+            What.SetText("你从 箱子 中获得了 " + "万印茶恢复 ×1");
             player.gameObject.GetComponent<Playercontroller>().Notice = 'q';
             Open();
         }
         else if(player.gameObject.GetComponent<Playercontroller>().Notice == 'f')
         {
-            What.SetText("You get the " + "FlashRefresh ×1" + " from the box");
+            What.SetText("你从 箱子 中获得了 " + "竹藤编恢复 ×1");
             player.gameObject.GetComponent<Playercontroller>().Notice = 'q';
             Open();
         }
         else if(player.gameObject.GetComponent<Playercontroller>().Notice == 'o')
         {
-            What.SetText("You get the " + "Score ×1" + " from the box");
+            What.SetText("你从 箱子 中获得了 " + "积分 ×1");
             player.gameObject.GetComponent<Playercontroller>().Notice = 'q';
             Open();
         }
         else if (player.gameObject.GetComponent<Playercontroller>().Notice == 't')
         {
-            What.SetText("You get the " + "Score ×2" + " from the box");
+            What.SetText("你从 箱子 中获得了 "+ "积分 ×2" );
             player.gameObject.GetComponent<Playercontroller>().Notice = 'q';
             Open();
         }
         else if (player.gameObject.GetComponent<Playercontroller>().Notice == 'F')
         {
-            What.SetText("You get the " + "Score ×5" + " from the box");
+            What.SetText("你从 箱子 中获得了 " + "积分 ×5");
             player.gameObject.GetComponent<Playercontroller>().Notice = 'q';
             Open();
         }
