@@ -89,6 +89,14 @@ public class Playercontroller : MonoBehaviour
 		{
 			position = gameObject.transform.position;
 			IsBack = true;
+			if (spriteRenderer.flipX)
+			{
+				shadow.transform.GetComponent<SpriteRenderer>().flipX = true;
+            }
+			else 
+			{
+				shadow.transform.GetComponent<SpriteRenderer>().flipX = false;
+            }
 			shadow.SetActive(true);
 			shadow.transform.position = new Vector2(position.x, position.y);
 		}

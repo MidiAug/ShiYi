@@ -13,11 +13,16 @@ public class SkillController : MonoBehaviour
     public Transform player;
     private Playercontroller playerController;
     private bool Skill1 = false;
+
+    // 当技能次数为0时，禁用特效，图标变暗
+    public Transform skill1;
+    private SpecialEffect specialEffect;
     private void Start()
     {
         playerController = player.GetComponent<Playercontroller>();
         SkillOneTimes = playerController.backtimes;
         SkillTwoTimes = playerController.dashTimes;
+        specialEffect = skill1.GetComponent<SpecialEffect>();
         RefreshUI();
     }
     public void RefreshUI()
@@ -27,11 +32,12 @@ public class SkillController : MonoBehaviour
     }
     public void useSkill(int whichOne)
     {
-        if(whichOne == 1)
+        if (whichOne == 1)
         {
             SkillOneTimes--;
+            if (SkillOneTimes == 0) specialEffect.banTheSkill();
         }
-        else if(whichOne == 2)
+        else if (whichOne == 2)
         {
             SkillTwoTimes--;
         }
@@ -39,15 +45,15 @@ public class SkillController : MonoBehaviour
     }
     public bool couldUse(int whichOne)
     {
-        if(whichOne == 1)
+        if (whichOne == 1)
         {
             return SkillOneTimes > 0;
         }
-        else if( whichOne == 2)
+        else if (whichOne == 2)
         {
             return SkillTwoTimes > 0;
         }
         return false;
     }
-   
+
 }
