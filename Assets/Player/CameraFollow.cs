@@ -4,8 +4,12 @@ public class CameraFollow : MonoBehaviour
 {
     public Transform player; // 玩家 Transform
     public Vector3 offset;   // 相机与玩家的偏移
-    public float smoothSpeed = 0.125f; // 平滑速度
+    public float smoothSpeed; // 平滑速度
 
+    private void Start()
+    {
+        transform.position = player.position + offset;
+    }
     private void LateUpdate()
     {
         // 目标位置：玩家位置 + 偏移
