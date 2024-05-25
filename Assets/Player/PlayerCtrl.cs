@@ -18,6 +18,7 @@ public class Playercontroller : MonoBehaviour
 	public GameObject shadow;
 	private bool IsBack = false;
 	private bool isJump = false;
+	private BoxCollider2D boxCollider2D;
 
 	public int dashTimes = 9;
 	public int backtimes = 9;
@@ -26,6 +27,8 @@ public class Playercontroller : MonoBehaviour
 	public bool isInvincible;//判断是否无敌(这个是不是没用，要不删了？) 有用的，可以点击查看引用去找
 	private float invincibleTimer;//计时器
 	private Animator animator;//人物动画
+
+	
 
 	bool isDash = false;
 	float dirX;
@@ -36,6 +39,13 @@ public class Playercontroller : MonoBehaviour
 	public char Notice='0';
     //音效
     private PlayerAudio characterAudio;
+
+	// 技能阴影特效
+	public float shadowAniSpeed; // 速度
+    public float shadowAniScale;
+	private Vector3 shadowOriScale;
+	private Color shadowOriColor;
+	private SpriteRenderer shadowRenderer;
     void Start()
 	{
 		animator = gameObject.GetComponent<Animator>();
@@ -45,6 +55,11 @@ public class Playercontroller : MonoBehaviour
 		rb.sharedMaterial = Friction;
         characterAudio = GetComponent<PlayerAudio>();
 		skillController = GameObject.Find("SkillController").GetComponent<SkillController>();
+		boxCollider2D = GetComponent<BoxCollider2D>();
+
+		shadowRenderer = shadow.transform.GetComponent<SpriteRenderer>();
+        shadowOriScale = shadow.transform.localScale;
+		shadowOriColor = shadowRenderer.color;
     }
 
 	void Update()
@@ -66,7 +81,7 @@ public class Playercontroller : MonoBehaviour
 				isInvincible = false;//倒计时结束
 			}
 		}
-		if(Input.GetKeyDown(KeyCode.L)&&skillController.couldUse(1))
+		if(Input.GetKeyUp(KeyCode.L)&&skillController.couldUse(1))
         {
 			Back();
         }
@@ -83,7 +98,24 @@ public class Playercontroller : MonoBehaviour
 		}
 	}
 
-	private void Back()
+	private float lastshadowAniTime = 0;
+    IEnumerator setShadow()
+    {
+		while (true)
+		{
+			 // 特效结束
+			if(shadow.transform.localScale.x - shadowOriScale.x<0.001&& shadowRenderer.color.a >254/255.0f)
+			{
+                break;
+			}
+            shadow.transform.localScale = Vector3.Lerp(shadow.transform.localScale, shadowOriScale,Time.deltaTime*shadowAniSpeed);
+            shadowRenderer.color = Color.Lerp(shadowRenderer.color, shadowOriColor,Time.deltaTime * shadowAniSpeed);
+            yield return null;
+
+        }
+    }
+
+    private void Back()
 	{
 		if (IsBack == false)
 		{
@@ -98,6 +130,9 @@ public class Playercontroller : MonoBehaviour
 				shadow.transform.GetComponent<SpriteRenderer>().flipX = false;
             }
 			shadow.SetActive(true);
+			shadowRenderer.color = new Color(shadowOriColor.r, shadowOriColor.g, shadowOriColor.b, 0); // 透明
+			shadow.transform.localScale = shadowOriScale*shadowAniScale; // 大
+			StartCoroutine(setShadow());
 			shadow.transform.position = new Vector2(position.x, position.y);
 		}
 		else
@@ -135,7 +170,7 @@ public class Playercontroller : MonoBehaviour
         rb.velocity = new Vector2(dirX * speed, rb.velocity.y);
 
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && skillController.couldUse(2) && rb.velocity !=Vector2.zero)
+        if (Input.GetKeyUp(KeyCode.LeftShift) && skillController.couldUse(2) && rb.velocity !=Vector2.zero)
         {
 			isDash = true;
         }
@@ -192,21 +227,23 @@ public class Playercontroller : MonoBehaviour
         animator.SetFloat("speed", moveDirection.sqrMagnitude);
         
     }
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
+	private void OnCollisionEnter2D(Collision2D collision)
+	{
 		// 碰到电梯成为子物体
 		if (collision.gameObject.tag == "Elevator")
 		{
 
 			transform.SetParent(collision.transform);
+
 		}
-    }
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        // 退出电梯恢复
-        if (collision.gameObject.tag == "Elevator")
-        {
+	}
+	private void OnCollisionExit2D(Collision2D collision)
+	{
+		// 退出电梯恢复
+		if (collision.gameObject.tag == "Elevator")
+		{
 			transform.SetParent(null);
-        }
-    }
+		}
+	}
+
 }
