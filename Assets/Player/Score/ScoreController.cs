@@ -44,13 +44,13 @@ public class ScoreController : MonoBehaviour
         }
         else if (player.gameObject.GetComponent<Playercontroller>().Notice == 'W')
         {
-            What.SetText("你从 箱子 中获得了 " + "五祖拳");
+            What.SetText("你从 箱子 中获得了 " + "五祖拳秘籍");
             player.gameObject.GetComponent<Playercontroller>().Notice = 'q';
             Open();
         }
         else if (player.gameObject.GetComponent<Playercontroller>().Notice == 'H')
         {
-            What.SetText("你从 箱子 中获得了 " + "永春纸质画");
+            What.SetText("你从 箱子 中获得了 " + "永春纸织画");
             player.gameObject.GetComponent<Playercontroller>().Notice = 'q';
             Open();
         }
