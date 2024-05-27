@@ -6,7 +6,7 @@ using UnityEngine;
 public class Playercontroller : MonoBehaviour
 {
 	private SkillController skillController;
-    private Rigidbody2D rb;
+  private Rigidbody2D rb;
 	private SpriteRenderer spriteRenderer;
 	//人物相关属性
 	public float speed = 7f;
@@ -24,7 +24,7 @@ public class Playercontroller : MonoBehaviour
 	public int backtimes = 9;
 	private int Jumpnum = 1;//跳跃次数
 	public bool die = false;
-	public bool isInvincible;//判断是否无敌(这个是不是没用，要不删了？) 有用的，可以点击查看引用去找
+	public bool isInvincible;
 	private float invincibleTimer;//计时器
 	private Animator animator;//人物动画
 
@@ -37,8 +37,9 @@ public class Playercontroller : MonoBehaviour
 
 	public int Score = 0;
 	public char Notice='0';
-    //音效
-    private PlayerAudio characterAudio;
+  
+	//音效
+  private PlayerAudio characterAudio;
 
 	// 技能阴影特效
 	public float shadowAniSpeed; // 速度
@@ -53,7 +54,7 @@ public class Playercontroller : MonoBehaviour
 		rb = GetComponent<Rigidbody2D>();
 		invincibleTimer = 0;
 		rb.sharedMaterial = Friction;
-        characterAudio = GetComponent<PlayerAudio>();
+    characterAudio = GetComponent<PlayerAudio>();
 		skillController = GameObject.Find("SkillController").GetComponent<SkillController>();
 		boxCollider2D = GetComponent<BoxCollider2D>();
 
@@ -82,9 +83,13 @@ public class Playercontroller : MonoBehaviour
 			}
 		}
 		if(Input.GetKeyUp(KeyCode.L)&&skillController.couldUse(1))
-        {
+    {
 			Back();
-        }
+    }
+		if (Input.GetKeyDown(KeyCode.O))
+		{
+			skillController.enabled = !skillController.enabled; // 禁用 skillController
+    }
 	}
 	private void FixedUpdate()
 	{
@@ -106,7 +111,7 @@ public class Playercontroller : MonoBehaviour
 			 // 特效结束
 			if(shadow.transform.localScale.x - shadowOriScale.x<0.001&& shadowRenderer.color.a >254/255.0f)
 			{
-                break;
+        break;
 			}
             shadow.transform.localScale = Vector3.Lerp(shadow.transform.localScale, shadowOriScale,Time.deltaTime*shadowAniSpeed);
             shadowRenderer.color = Color.Lerp(shadowRenderer.color, shadowOriColor,Time.deltaTime * shadowAniSpeed);
@@ -217,7 +222,7 @@ public class Playercontroller : MonoBehaviour
 
             rb.MovePosition(dashPosition);
             isDash = false;
-			skillController.useSkill(2);
+						skillController.useSkill(2);
         }
         float moveY = Input.GetAxisRaw("Vertical");
         Vector2 moveDirection = new Vector2(dirX, moveY).normalized;
