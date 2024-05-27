@@ -12,7 +12,7 @@ public class RBoxcontroller : MonoBehaviour
     {
         if(isTrigger==true&&Input.GetKeyDown(KeyCode.B))
         {
-            rand = Random.Range(1, 10);
+            rand = Random.Range(1, 12);
             if(rand==1)
             {
                 player.gameObject.GetComponent<Playercontroller>().backtimes = 9;
@@ -45,6 +45,18 @@ public class RBoxcontroller : MonoBehaviour
             {
                 player.gameObject.GetComponent<Playercontroller>().Score += 5;
                 player.gameObject.GetComponent<Playercontroller>().Notice = 'F';
+                Destroy(gameObject);
+            }
+            else if (rand == 10)//Îå×æÈ­
+            {
+                player.gameObject.GetComponent<Playercontroller>().HaveDraw = true;
+                player.gameObject.GetComponent<Playercontroller>().Notice = 'W';
+                Destroy(gameObject);
+            }
+            else if (rand == 11)//»­
+            {
+                player.gameObject.GetComponent<Playercontroller>().HaveFist = true;
+                player.gameObject.GetComponent<Playercontroller>().Notice = 'H';
                 Destroy(gameObject);
             }
         }

@@ -37,9 +37,10 @@ public class Playercontroller : MonoBehaviour
 
 	public int Score = 0;
 	public char Notice='0';
-  
+	public bool HaveFist = false;
+	public bool HaveDraw = false;
 	//音效
-  private PlayerAudio characterAudio;
+	private PlayerAudio characterAudio;
 
 	// 技能阴影特效
 	public float shadowAniSpeed; // 速度
