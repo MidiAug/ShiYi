@@ -26,7 +26,7 @@ public class LetBegin : MonoBehaviour
     }
     void OnButtonClick()
     {
-        StartCoroutine(LoadSceneAfterDelay(3f));
+        StartCoroutine(LoadSceneAfterDelay(2f));
     }
     IEnumerator LoadSceneAfterDelay(float delay)
     {

@@ -9,8 +9,8 @@ public class EscMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        escMenu.SetActive(false);
-        musicSetting.SetActive(false);
+        /*escMenu.SetActive(false);
+        musicSetting.SetActive(false);*/
     }
 
     //按下esc键时，暂停游戏，并且显示菜单
